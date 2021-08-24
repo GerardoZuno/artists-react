@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Form from "./components/Form";
 import Song from "./components/Song";
+import axios from 'axios';
+import Info from "./components/Info";
+
 
 function App() {
   const [letterSearch, setLetterSearch] = useState({});
   const [letter, setLetter] = useState('');
+  const [info, setInfo] = useState({})
 
 
   useEffect(() => {
@@ -13,15 +17,22 @@ function App() {
     const consultarApi = async () => {
       const { artista, cancion } = letterSearch;
 
-      const url = `https://api.lyrics.ovh/v1/${artista}/${cancion}`;
+      /*const url = `https://api.lyrics.ovh/v1/${artista}/${cancion}`;*/
+      const url2 = `https://www.theaudiodb.com/api/v1/json/1/search.php?s=${artista}`;
+      
+      
+      const [letra, informacion] = await Promise.all([
+       /* axios(url),*/
+        axios(url2)
+      ]);
 
-        const response = await fetch(url);
-        const result = await response.json();
-        console.log(result.data.lyrics);
+      /*setLetter(letra.data.lyrics);*/
+      setInfo(informacion.data.artists[0]);
+
       
     };
     consultarApi();
-  }, [letterSearch]);
+  }, [letterSearch, info]);
 
   return (
     <> 
@@ -30,7 +41,7 @@ function App() {
     <div className="container">
         <div className="row">
            <div className="col-md-6">
-             1
+             <Info info={info}/>
            </div>
            <div className="col-md-6">
              <Song letter={letter}/>
