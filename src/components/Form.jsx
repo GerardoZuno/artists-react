@@ -1,11 +1,43 @@
-import React from "react";
+import React, {useState} from "react";
 
 function Form() {
+
+  const [search, setSearch] = useState({
+      artista: '',
+      cancion: ''
+  })
+   const {artista, cancion} = search
+
+   const [error, setError] = useState(false)
+
+
+
+  const handleChange = (e) => {
+    setSearch({
+        ...search,
+        [e.target.name] : e.target.value
+    })
+  }
+
+  const handleSubmit = (e) => {
+      e.preventDefault()
+      if(!artista.trim() || !cancion.trim()) {
+        setError(true)  
+        return
+      }
+      setError(false)  
+
+  }
+
+
   return (
     <div className="bg-info">
       <div className="container">
-          <form>
-            <div className="col card text-white bg-transparent mb-5 pt-5 pb-2"></div>
+          <div className="row">
+          <form 
+          className="col card text-white bg-transparent mb-5 pt-5 pb-2"
+          onSubmit={handleSubmit}>
+             
             <fieldset>
               <legend className="text-center">Buscador Letras Canciones</legend>
               <div className="row">
@@ -17,6 +49,8 @@ function Form() {
                       className="form-control"
                       name="artista"
                       placeholder="Nombre Artista"
+                      onChange={handleChange}
+                      value={artista}
                     />
                   </div>
                 </div>
@@ -29,6 +63,10 @@ function Form() {
                       className="form-control"
                       name="cancion"
                       placeholder="Nombre Cancion"
+                      onChange={handleChange}
+                      value={cancion}
+
+
                     />
                   </div>
                 </div>
@@ -43,6 +81,7 @@ function Form() {
             </fieldset>
           </form>
         </div>
+      </div>
       </div>
     
   );
